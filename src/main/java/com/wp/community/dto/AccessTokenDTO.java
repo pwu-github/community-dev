@@ -1,7 +1,7 @@
 package com.wp.community.dto;
 
 /**
- * access_token参数封装类
+ * access_token参数封装类, 用于网络传输的抽象为dto，数据库用model
  */
 public class AccessTokenDTO {
 
