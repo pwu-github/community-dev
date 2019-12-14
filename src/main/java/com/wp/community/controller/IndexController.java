@@ -18,17 +18,20 @@ public class IndexController {
     @GetMapping("/")
     public String inde(HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if("token".equals(cookie.getName())){
-                String token = cookie.getValue();
-                User user = userMapper.findByToken(token);
-                if(user != null){
-                    //登陆成功，将user加入到session中
-                    request.getSession().setAttribute("user",user);
+        if(cookies != null && cookies.length != 0){
+            for (Cookie cookie : cookies) {
+                if("token".equals(cookie.getName())){
+                    String token = cookie.getValue();
+                    User user = userMapper.findByToken(token);
+                    if(user != null){
+                        //登陆成功，将user加入到session中
+                        request.getSession().setAttribute("user",user);
+                    }
+                    break;
                 }
-                break;
             }
         }
+
         return "index";
     }
 }

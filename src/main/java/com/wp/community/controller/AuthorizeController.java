@@ -44,14 +44,15 @@ public class AuthorizeController {
         GitHubUser gitHubUser = githubProvider.getUser(accessToken);
         if(gitHubUser != null){
             User user = new User();
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
             user.setAccountId(String.valueOf(gitHubUser.getId()));
             user.setName(gitHubUser.getName());
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
-            String token = UUID.randomUUID().toString();
-            user.setToken(token);
-            response.addCookie(new Cookie("token",token));
+            user.setAvatarUrl(gitHubUser.getAvatarUurl());
             userMapper.insert(user);
+            response.addCookie(new Cookie("token",token));
             //重定向到首页
             return "redirect:/";
         }else{
