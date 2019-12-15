@@ -50,7 +50,7 @@ public class AuthorizeController {
             user.setName(gitHubUser.getName());
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
-            user.setAvatarUrl(gitHubUser.getAvatarUurl());
+            user.setAvatarUrl(gitHubUser.getAvatarUrl());
             userMapper.insert(user);
             response.addCookie(new Cookie("token",token));
             //重定向到首页
