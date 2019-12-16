@@ -40,6 +40,7 @@ public class IndexController {
                 }
             }
         }
+        //获得DTO对象，目的是为了获取登录用户的头像
         List<QuestionDTO> questions = questionService.list();
         model.addAttribute("questions",questions);
         return "index";

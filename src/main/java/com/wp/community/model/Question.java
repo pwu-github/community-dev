@@ -17,6 +17,7 @@ public class Question {
     private String tag;
     private Long gmtCreate;
     private Long gmtModified;
+    //用户id
     private Integer creator;
     private Integer commentCount;
     private Integer viewCount;
