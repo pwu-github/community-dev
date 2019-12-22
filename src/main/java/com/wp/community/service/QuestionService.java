@@ -28,6 +28,7 @@ public class QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
 
+    //首页
     public PaginationDTO list(Integer page, Integer size) {
         //用于分页
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -63,6 +64,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
+    //个人问题页面
     public PaginationDTO list(Integer userId, Integer page, Integer size) {
         //用于分页
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -96,5 +98,16 @@ public class QuestionService {
         }
         paginationDTO.setQuestions(questionDTOList);
         return paginationDTO;
+    }
+
+    //根据id查询 问题
+    public QuestionDTO getById(Integer id) {
+        Question question = questionMapper.getById(id);
+        QuestionDTO questionDTO = new QuestionDTO();
+        //利用spring的工具类将question对象属性拷贝到questionDTO中
+        BeanUtils.copyProperties(question,questionDTO);
+        User user = userMapper.findById(question.getCreator());
+        questionDTO.setUser(user);
+        return questionDTO;
     }
 }
