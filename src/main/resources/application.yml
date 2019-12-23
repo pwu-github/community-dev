@@ -21,3 +21,5 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+  type-aliases-package: com.wp.community.model
+  mapper-locations: classpath:mapper/*.xml
