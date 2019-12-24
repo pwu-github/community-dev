@@ -9,6 +9,8 @@ package com.wp.community.service;
 
 import com.wp.community.dto.PaginationDTO;
 import com.wp.community.dto.QuestionDTO;
+import com.wp.community.exception.CustomizeErrorCode;
+import com.wp.community.exception.CustomizeException;
 import com.wp.community.mapper.QuestionMapper;
 import com.wp.community.mapper.UserMapper;
 import com.wp.community.model.Question;
@@ -109,6 +111,9 @@ public class QuestionService {
     //根据id查询 问题
     public QuestionDTO getById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if(question == null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         //利用spring的工具类将question对象属性拷贝到questionDTO中
         BeanUtils.copyProperties(question,questionDTO);
@@ -134,7 +139,10 @@ public class QuestionService {
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria().andIdEqualTo(question.getId());
             question.setGmtModified(System.currentTimeMillis());
-            questionMapper.updateByExampleSelective(updateQuestion,questionExample);
+            int update = questionMapper.updateByExampleSelective(updateQuestion, questionExample);
+            if(update != 1){
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 }
