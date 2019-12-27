@@ -11,6 +11,7 @@ import com.wp.community.dto.PaginationDTO;
 import com.wp.community.dto.QuestionDTO;
 import com.wp.community.exception.CustomizeErrorCode;
 import com.wp.community.exception.CustomizeException;
+import com.wp.community.mapper.QuestionExtMapper;
 import com.wp.community.mapper.QuestionMapper;
 import com.wp.community.mapper.UserMapper;
 import com.wp.community.model.Question;
@@ -31,6 +32,8 @@ public class QuestionService {
     private UserMapper userMapper;
     @Autowired
     private QuestionMapper questionMapper;
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     //首页
     public PaginationDTO list(Integer page, Integer size) {
@@ -144,5 +147,13 @@ public class QuestionService {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
         }
+    }
+
+    //累计阅读数
+    public void incView(Integer id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
     }
 }
