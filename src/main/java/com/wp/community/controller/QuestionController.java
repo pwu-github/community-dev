@@ -24,7 +24,7 @@ public class QuestionController {
 
     //根据id获得 问题页面，将 id作为请求路径的一部分，因为id唯一，所以由此得到的 问题页面 也是唯一的
     @GetMapping("/question/{id}")
-    public String question(@PathVariable(name = "id") Integer id, Model model){
+    public String question(@PathVariable(name = "id") Long id, Model model){
 
         QuestionDTO questionDTO = questionService.getById(id);
         //累计阅读数
