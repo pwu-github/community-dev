@@ -11,11 +11,13 @@ import com.wp.community.enums.CommentTypeEnum;
 import com.wp.community.exception.CustomizeErrorCode;
 import com.wp.community.exception.CustomizeException;
 import com.wp.community.mapper.CommentMapper;
+import com.wp.community.mapper.QuestionExtMapper;
 import com.wp.community.mapper.QuestionMapper;
 import com.wp.community.model.Comment;
 import com.wp.community.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CommentService {
@@ -24,7 +26,10 @@ public class CommentService {
     private CommentMapper commentMapper;
     @Autowired
     private QuestionMapper questionMapper;
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
+    @Transactional
     public void insert(Comment comment){
         if(comment.getParentId() == null || comment.getParentId() == 0){
             throw new CustomizeException(CustomizeErrorCode.TARGET_PARAM_NOT_FOUND);
@@ -44,6 +49,8 @@ public class CommentService {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
             commentMapper.insert(comment);
+            question.setCommentCount(1);
+            questionExtMapper.incCommentCount(question);
         }
     }
 }
