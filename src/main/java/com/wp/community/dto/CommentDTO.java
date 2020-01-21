@@ -1,17 +1,17 @@
-/**
- * FileName: CommentDTO
- * Author: WP
- * Date: 2020/1/5 14:58
- * Description:
- * History:
- **/
 package com.wp.community.dto;
 
+import com.wp.community.model.User;
 import lombok.Data;
 
 @Data
 public class CommentDTO {
-    private Long parent_id;
-    private String content;
+    private Long id;
+    private Long parentId;
     private Integer type;
+    private Long commentator;
+    private Long gmtCreate;
+    private Long gmtModified;
+    private Long likeCount;
+    private String content;
+    private User user;
 }

@@ -7,10 +7,9 @@
  **/
 package com.wp.community.controller;
 
-import com.wp.community.dto.CommentDTO;
+import com.wp.community.dto.CommentCreateDTO;
 import com.wp.community.dto.ResultDTO;
 import com.wp.community.exception.CustomizeErrorCode;
-import com.wp.community.mapper.CommentMapper;
 import com.wp.community.model.Comment;
 import com.wp.community.model.User;
 import com.wp.community.service.CommentService;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.transform.Result;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,15 +31,15 @@ public class CommentController {
 
     @ResponseBody
     @PostMapping("/comment")
-    public Object post(@RequestBody CommentDTO commentDTO, HttpServletRequest request){
+    public Object post(@RequestBody CommentCreateDTO commentCreateDTO, HttpServletRequest request){
         User user = (User) request.getSession().getAttribute("user");
         if(user == null){
             return ResultDTO.errorOf(CustomizeErrorCode.NOT_LOGIN);
         }
         Comment comment = new Comment();
-        comment.setContent(commentDTO.getContent());
-        comment.setParentId(commentDTO.getParent_id());
-        comment.setType(commentDTO.getType());
+        comment.setContent(commentCreateDTO.getContent());
+        comment.setParentId(commentCreateDTO.getParent_id());
+        comment.setType(commentCreateDTO.getType());
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setGmtModified(System.currentTimeMillis());
         comment.setCommentator(user.getId());
