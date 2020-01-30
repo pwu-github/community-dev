@@ -9,7 +9,7 @@ package com.wp.community.controller;
 
 import com.wp.community.dto.CommentDTO;
 import com.wp.community.dto.QuestionDTO;
-import com.wp.community.mapper.QuestionMapper;
+import com.wp.community.enums.CommentTypeEnum;
 import com.wp.community.service.CommentService;
 import com.wp.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class QuestionController {
     @GetMapping("/question/{id}")
     public String question(@PathVariable(name = "id") Long id, Model model){
         QuestionDTO questionDTO = questionService.getById(id);
-        List<CommentDTO> comments = commentService.listByQuestionId(id);
+        List<CommentDTO> comments = commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
 
         //累计阅读数
         questionService.incView(id);
