@@ -11,10 +11,7 @@ import com.wp.community.dto.CommentDTO;
 import com.wp.community.enums.CommentTypeEnum;
 import com.wp.community.exception.CustomizeErrorCode;
 import com.wp.community.exception.CustomizeException;
-import com.wp.community.mapper.CommentMapper;
-import com.wp.community.mapper.QuestionExtMapper;
-import com.wp.community.mapper.QuestionMapper;
-import com.wp.community.mapper.UserMapper;
+import com.wp.community.mapper.*;
 import com.wp.community.model.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +35,8 @@ public class CommentService {
     private QuestionExtMapper questionExtMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private CommentExtMapper commentExtMapper;
 
     @Transactional
     public void insert(Comment comment){
@@ -48,12 +47,19 @@ public class CommentService {
             throw new CustomizeException(CustomizeErrorCode.TYPE_PARAM_WRONG);
         }
         if (comment.getType() == CommentTypeEnum.COMMENT.getType()){
+            //回复评论
             Comment dbcomment = commentMapper.selectByPrimaryKey(comment.getId());
             if (dbcomment == null){
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
             commentMapper.insert(comment);
+            //增加评论数
+            Comment parentComment = new Comment();
+            parentComment.setId(comment.getParentId());
+            parentComment.setCommentCount(1);
+            commentExtMapper.incCommentCount(comment);
         } else {
+            //回复问题
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
             if (question == null){
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
