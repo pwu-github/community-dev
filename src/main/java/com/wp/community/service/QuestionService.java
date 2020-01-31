@@ -55,8 +55,10 @@ public class QuestionService {
         paginationDTO.setPagination(totalPage, page);
         //计算偏移量
         Integer offset = size * (page - 1);
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.setOrderByClause("gmt_create desc");
         //mybatis的分頁selectByExampleWithRowbounds
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(new QuestionExample(),new RowBounds(offset,size));
+        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample,new RowBounds(offset,size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questions) {
             //通过id查出user，从而获得user头像
