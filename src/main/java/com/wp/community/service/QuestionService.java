@@ -9,6 +9,7 @@ package com.wp.community.service;
 
 import com.wp.community.dto.PaginationDTO;
 import com.wp.community.dto.QuestionDTO;
+import com.wp.community.dto.QuestionQueryDTO;
 import com.wp.community.exception.CustomizeErrorCode;
 import com.wp.community.exception.CustomizeException;
 import com.wp.community.mapper.QuestionExtMapper;
@@ -40,11 +41,17 @@ public class QuestionService {
     private QuestionExtMapper questionExtMapper;
 
     //首页
-    public PaginationDTO list(Integer page, Integer size) {
+    public PaginationDTO list(String search,Integer page, Integer size) {
+        if(StringUtils.isNotBlank(search)){
+            String[] tags = StringUtils.split(search," ");
+            search = Arrays.stream(tags).collect(Collectors.joining("|"));
+        }
         //用于分页
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalPage;
-        Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+        questionQueryDTO.setSearch(search);
+        Integer totalCount = questionExtMapper.countBySearch(new QuestionQueryDTO());
         if(totalCount % size == 0){
             totalPage = totalCount / size;
         }else{
@@ -61,8 +68,9 @@ public class QuestionService {
         Integer offset = size * (page - 1);
         QuestionExample questionExample = new QuestionExample();
         questionExample.setOrderByClause("gmt_create desc");
-        //mybatis的分頁selectByExampleWithRowbounds
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample,new RowBounds(offset,size));
+        questionQueryDTO.setPage(page);
+        questionQueryDTO.setSize(size);
+        List<Question> questions = questionExtMapper.selectBySearch(questionQueryDTO);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questions) {
             //通过id查出user，从而获得user头像

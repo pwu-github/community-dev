@@ -19,10 +19,12 @@ public class IndexController {
     @GetMapping("/")
     public String index(HttpServletRequest request, Model model,
                        @RequestParam(name = "page",defaultValue = "1") Integer page,
-                       @RequestParam(name = "size",defaultValue = "5")Integer size){
+                       @RequestParam(name = "size",defaultValue = "5")Integer size,
+                        @RequestParam(name = "search",required = false) String search){
         //获得DTO对象，目的是为了获取登录用户的头像
-        PaginationDTO pagination = questionService.list(page,size);
+        PaginationDTO pagination = questionService.list(search,page,size);
         model.addAttribute("pagination",pagination);
+        model.addAttribute("search",search);
         return "index";
     }
 }
