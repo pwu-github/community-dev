@@ -23,3 +23,13 @@ mybatis:
     map-underscore-to-camel-case: true
   type-aliases-package: com.wp.community.mapper
   mapper-locations: classpath:mapper/*.xml
+
+#配置日志
+logging:
+  file:
+    max-size: 1KB
+    max-history: 3
+  level:
+    root: info
+    com.wp.community.mapper: debug
+

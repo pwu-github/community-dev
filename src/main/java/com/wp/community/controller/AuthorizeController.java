@@ -5,6 +5,7 @@ import com.wp.community.dto.GitHubUser;
 import com.wp.community.model.User;
 import com.wp.community.provider.GithubProvider;
 import com.wp.community.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @Controller
+@Slf4j
 public class AuthorizeController {
 
     @Autowired
@@ -55,6 +57,7 @@ public class AuthorizeController {
             //重定向到首页
             return "redirect:/";
         }else{
+            log.error("callback get github error,{}", gitHubUser);
             //登陆失败，重定向到首页，重新登陆
             return "redirect:/";
         }
