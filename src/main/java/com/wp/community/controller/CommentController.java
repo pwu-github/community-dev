@@ -50,7 +50,7 @@ public class CommentController {
         comment.setGmtModified(System.currentTimeMillis());
         comment.setCommentator(user.getId());
         comment.setLikeCount(0L);
-        commentService.insert(comment);
+        commentService.insert(comment,user);
         Map<Object,Object> objectObjectMap = new HashMap<>();
         objectObjectMap.put("message","成功");
         return objectObjectMap;
